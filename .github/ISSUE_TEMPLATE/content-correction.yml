@@ -1,0 +1,46 @@
+name: Content correction
+description: The skill says something wrong or outdated about UNITS
+title: "[correction] "
+labels: ["content", "correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! ⚠️ **Do not paste developer tokens (`c2Et…`), JWTs (`eyJ…`), client secrets, OTPs or personal data.**
+  - type: input
+    id: location
+    attributes:
+      label: File and section
+      placeholder: "skills/units/references/token-programs.md §9 loan_disbursed"
+    validations:
+      required: true
+  - type: textarea
+    id: says
+    attributes:
+      label: What the skill says
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happens
+      description: Include the request/response (secrets removed) or a source link (repo, path, commit).
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence type
+      options:
+        - Observed live on sanctum (sandbox)
+        - Observed live on production
+        - Observed on a local stack
+        - Reading the source code
+        - Public documentation
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Date / build observed
+      placeholder: "2026-10-04, units-api 2026.09.17_RC"

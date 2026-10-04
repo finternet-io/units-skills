@@ -1,0 +1,31 @@
+name: Skill answer problem
+description: Claude gave a wrong, incomplete or unhelpful answer while using the skill
+title: "[answer] "
+labels: ["skill-behaviour"]
+body:
+  - type: markdown
+    attributes:
+      value: "⚠️ Remove any tokens, JWTs, secrets or personal data before posting."
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where were you using the skill?
+      options: [Claude Code, Claude.ai, Claude API, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Your prompt
+    validations:
+      required: true
+  - type: textarea
+    id: answer
+    attributes:
+      label: Claude's answer (relevant part)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What a correct answer would include

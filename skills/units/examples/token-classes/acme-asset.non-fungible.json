@@ -1,0 +1,44 @@
+{
+  "_about": "ACME-ASSET: unique asset token (program `non-fungible`, standard UNITS-NFT): mint, burn, transfer (same-instance = local_transfer), lock/unlock. There are NO lien operations - use lock/unlock as an interim encumbrance flag or request a custom program. ENVIRONMENT-DEPENDENT: present in code HEAD but not available on sanctum in Aug 2026 - check /v1/tokenprogram/search before relying on it.",
+  "register": {
+    "tokenClass": "ACME-ASSET",
+    "tokenStandard": "UNITS-NFT",
+    "name": "ACME Registered Asset",
+    "description": "One token per uniquely identified physical or financial asset in the ACME registry.",
+    "schema": {
+      "type": "object",
+      "description": "Documentation only (not enforced).",
+      "properties": {
+        "assetRef": { "type": "string" },
+        "assetType": { "type": "string" },
+        "valuation": { "type": "object", "properties": { "amount": { "type": "string" }, "currency": { "type": "string" } } },
+        "evidenceSha256": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "fungible": false,
+      "symbol": "ACMEASSET",
+      "category": "asset",
+      "transferable": true,
+      "divisible": false,
+      "burnable": true,
+      "revocable": false,
+      "soulbound": false
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-ASSET",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "non-fungible",
+    "preHooks": [
+      { "hookId": "validation", "priority": 10, "enabled": true },
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 1, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256"
+    }
+  }
+}

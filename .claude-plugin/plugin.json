@@ -1,0 +1,20 @@
+{
+  "name": "units",
+  "version": "1.0.0",
+  "description": "UNITS skill for Finternet, a mission of Networks for Humanity: integration, portals and API access, token classes, token programs, API reference, worked examples, program authoring, local development, troubleshooting.",
+  "author": {
+    "name": "Networks for Humanity (NFH) \u00b7 Finternet",
+    "url": "https://nfh.global"
+  },
+  "keywords": [
+    "finternet",
+    "ledger",
+    "networks-for-humanity",
+    "nfh",
+    "token-programs",
+    "tokenisation",
+    "units"
+  ],
+  "license": "MIT",
+  "homepage": "https://docs.finternetlab.io"
+}

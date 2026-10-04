@@ -1,0 +1,49 @@
+{
+  "_about": "ACME-USDC: proxy (shadow) of USDC held on Base (program `stables`, standard PROXY-FT). Created with /v1/token/add proxy branch (chainId, contractAddress, walletAddress, value). contractAddress in token/add must equal metadata.contractIds[chainId]. Prefer the SEEDED `USDC` class: its STORED identities are [] so any authenticated user can import their own wallet. On register, `identities: []` behaves like omitted (you become owner+issuer); to open your own proxy class to all users, set it afterwards with /v1/tokenclass/update {tokenClass, identities: []} (verify on your instance).",
+  "register": {
+    "tokenClass": "ACME-USDC",
+    "tokenStandard": "PROXY-FT",
+    "name": "USD Coin (ACME proxy)",
+    "description": "Shadow balance of USDC held in users' own wallets on Base mainnet and Base Sepolia.",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "balance": { "type": "string", "pattern": "^[0-9]+$", "description": "On-chain balance in smallest unit (6 decimals)" },
+        "chainId": { "type": "string", "description": "CAIP-2 chain id" }
+      },
+      "required": ["balance", "chainId"]
+    },
+    "metadata": {
+      "decimals": 6,
+      "symbol": "USDC",
+      "fungible": true,
+      "category": "stablecoin",
+      "transferable": true,
+      "divisible": true,
+      "burnable": false,
+      "revocable": false,
+      "soulbound": false,
+      "proxyFor": "native",
+      "contractIds": {
+        "eip155:8453": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "eip155:84532": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      },
+      "valuation": { "parValue": "1", "currency": "USD", "region": "global", "compliance": "regulated" }
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-USDC",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "stables",
+    "preHooks": [
+      { "hookId": "validation", "priority": 1, "enabled": true },
+      { "hookId": "logging", "priority": 10, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 1, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256"
+    }
+  }
+}

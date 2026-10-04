@@ -1,0 +1,14 @@
+{
+  "name": "finternet-units",
+  "owner": {
+    "name": "Networks for Humanity (NFH)",
+    "url": "https://nfh.global"
+  },
+  "plugins": [
+    {
+      "name": "units",
+      "source": "./",
+      "description": "Everything you need to integrate with and build on UNITS (except deployment)."
+    }
+  ]
+}

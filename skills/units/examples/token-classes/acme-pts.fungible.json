@@ -1,0 +1,45 @@
+{
+  "_about": "ACME-PTS: fungible loyalty points (program `fungible`, standard UNITS-FT). Rename the ACME- prefix: class names are GLOBALLY unique across all tenants. `config.tokenClassId` is filled in from the register response `response.id`. Fungible classes keep ONE token per owner: repeat operator mints top up the same treasury token, and customers get their own token only by receiving a transfer. maxSupply is checked against the minting account's own token (a per-issuer cap; the class cap while you are the only issuer). No minBalance is set here; if you add one (even \"0\") with the min-balance hook, every burn and lock must carry `value` (whole-token locks fail). See references/token-classes.md 6.2 and token-programs.md 4.",
+  "register": {
+    "tokenClass": "ACME-PTS",
+    "tokenStandard": "UNITS-FT",
+    "name": "ACME Loyalty Points",
+    "description": "Fungible loyalty points issued by ACME. 2 decimals (1 point = 100 base units).",
+    "schema": {
+      "type": "object",
+      "description": "Documentation only - UNITS does not enforce class schemas; the fungible program validates.",
+      "properties": {
+        "programRef": { "type": "string" },
+        "campaign": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "decimals": 2,
+      "symbol": "ACMEPTS",
+      "fungible": true,
+      "category": "utility",
+      "transferable": true,
+      "divisible": true,
+      "burnable": true,
+      "revocable": false,
+      "soulbound": false,
+      "maxSupply": "100000000000"
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-PTS",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "fungible",
+    "preHooks": [
+      { "hookId": "max-supply", "priority": 5, "enabled": true, "operations": ["mint"] },
+      { "hookId": "validation", "priority": 10, "enabled": true },
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 1, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256"
+    }
+  }
+}

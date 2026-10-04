@@ -1,0 +1,54 @@
+{
+  "_about": "ACME-POOL: securitisation / direct-assignment pool token (program `loan-pool-nft-program`, standard UNITS-LoanPool). Pool JSON keys are snake_case (except FLDG); money fields are integer STRINGS. Mint links the pool to its ACME-LOAN tokens atomically. NOTE: the seeded LOAN-POOL config uses tokenIdsFrom \"payload.loan_token_ids\", which code review suggests does not resolve after the engine unwraps the payload (silently skipped -> no LoanPoolMembership claims on the loans). \"payload.data.loan_token_ids\" is the suggested fix - verify on your instance by reading a member loan after pool mint.",
+  "register": {
+    "tokenClass": "ACME-POOL",
+    "tokenStandard": "UNITS-LoanPool",
+    "name": "ACME Loan Pool",
+    "description": "One token per PTC / direct-assignment pool; dependency claims point at every constituent ACME-LOAN token.",
+    "schema": {
+      "type": "object",
+      "description": "Documentation only (not enforced). Program requires strings for money fields and the key FLDG (upper case).",
+      "properties": {
+        "pool_ref_id": { "type": "string" },
+        "pool_type": { "type": "string", "enum": ["PassThroughCertificate", "DirectAssignment"] },
+        "loan_token_ids": { "type": "array", "items": { "type": "string" } },
+        "total_pool_amount": { "type": "string", "pattern": "^[0-9]+$" },
+        "pool_status": { "type": "string", "enum": ["Active", "Closed"] }
+      }
+    },
+    "metadata": {
+      "fungible": false,
+      "symbol": "ACMEPOOL",
+      "category": "loan-pool",
+      "transferable": false,
+      "divisible": false,
+      "burnable": false,
+      "revocable": false,
+      "soulbound": true,
+      "valueCurrency": "INR"
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-POOL",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "loan-pool-nft-program",
+    "preHooks": [
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256",
+      "additionalStateRequirements": [
+        {
+          "key": "loan_tokens",
+          "tokenClass": "ACME-LOAN",
+          "tokenIdsFrom": "payload.data.loan_token_ids",
+          "operations": ["mint"],
+          "multiple": true
+        }
+      ]
+    }
+  }
+}

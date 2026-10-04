@@ -1,0 +1,63 @@
+{
+  "_about": "ACME-VOUCHER: purpose-bound, category-capped voucher (program `purpose-bound-voucher`, standard UNITS-SFT). TARGET DESIGN ONLY: on current builds mint/issue/redeem fail with CAPABILITY_DENIED (program capabilities lack DomainLifecycle). Registering the class and config works; writes do not. See worked-examples.md scenario F for the live design-around. Also note: the credential-verification hook compares the credential's data.type as a STRING, while W3C VC `type` is an array - so real VCs may never satisfy requiredCredentials until fixed.",
+  "register": {
+    "tokenClass": "ACME-VOUCHER",
+    "tokenStandard": "UNITS-SFT",
+    "name": "ACME Purpose Voucher",
+    "description": "Purpose-bound voucher redeemable only in approved categories, with per-category caps.",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "string", "pattern": "^[0-9]+$", "description": "Face value in smallest unit (2 decimals)" },
+        "categoryLimits": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[0-9]+$" } },
+        "status": { "type": "string", "enum": ["Created", "Active", "Redeemed", "Revoked", "TransferredOut"] },
+        "expiryDate": { "type": "string", "format": "date" }
+      },
+      "required": ["value", "status", "expiryDate"]
+    },
+    "metadata": {
+      "decimals": 2,
+      "symbol": "ACMEVCH",
+      "fungible": false,
+      "category": "voucher",
+      "transferable": false,
+      "divisible": false,
+      "burnable": false,
+      "revocable": true,
+      "soulbound": false,
+      "redeemableCategories": ["fertilizer", "cattle_feed", "veterinary", "farm_inputs"],
+      "escrowCurrency": "USDC",
+      "valuation": { "parValue": "1", "currency": "INR", "region": "IN", "compliance": "RBI" }
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-VOUCHER",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "purpose-bound-voucher",
+    "preHooks": [
+      { "hookId": "validation", "priority": 1, "enabled": true },
+      { "hookId": "credential-verification", "priority": 10, "enabled": true, "operations": ["issue"] },
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 1, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256",
+      "voucherTransfer": { "enabled": false },
+      "credentialVerification": {
+        "requiredCredentials": ["ACME-KYC"],
+        "additionalStatesKey": "beneficiary_credentials"
+      },
+      "additionalStateRequirements": [
+        {
+          "key": "beneficiary_credentials",
+          "tokenClass": "ACME-KYC",
+          "ownerFrom": "payload.to",
+          "operations": ["issue"],
+          "multiple": true
+        }
+      ]
+    }
+  }
+}

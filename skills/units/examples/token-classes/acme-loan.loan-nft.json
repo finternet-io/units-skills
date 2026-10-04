@@ -1,0 +1,47 @@
+{
+  "_about": "ACME-LOAN: one non-fungible token per loan (program `loan-nft-program`, standard UNITS-Loan). Created with /v1/token/mint (mint == loan_originated, needs the full LoanOriginatedPayload in `data`), then the 21 further domain operations via /v1/token/transact. Not transferable (federation transfer rejects UNITS-Loan). Loan JSON keys are camelCase; u128 fields are integer strings, u32 fields are JSON numbers.",
+  "register": {
+    "tokenClass": "ACME-LOAN",
+    "tokenStandard": "UNITS-Loan",
+    "name": "ACME Loan Note",
+    "description": "One token per loan account; carries the loan lifecycle from origination to closure.",
+    "schema": {
+      "type": "object",
+      "description": "Documentation only (not enforced). The loan-nft-program validates LoanOriginatedPayload.",
+      "properties": {
+        "loanRefId": { "type": "string" },
+        "loanAmount": { "type": "string", "pattern": "^[0-9]+$" },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "borrowerId": { "type": "string" },
+        "loanEntityStatus": { "type": "string", "enum": ["Active", "Delinquent", "NPA", "WrittenOff", "Closed"] },
+        "principalOutstanding": { "type": "string", "pattern": "^[0-9]+$" },
+        "cersaiRegNumber": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "fungible": false,
+      "symbol": "ACMELOAN",
+      "category": "loan",
+      "transferable": false,
+      "divisible": false,
+      "burnable": false,
+      "revocable": false,
+      "soulbound": false,
+      "valueCurrency": "INR"
+    }
+  },
+  "config": {
+    "tokenClass": "ACME-LOAN",
+    "tokenClassId": "<tokenClassId from tokenclass/register response.id>",
+    "programId": "loan-nft-program",
+    "preHooks": [
+      { "hookId": "logging", "priority": 20, "enabled": true }
+    ],
+    "postHooks": [
+      { "hookId": "logging", "priority": 1, "enabled": true }
+    ],
+    "config": {
+      "stateCommitmentAlgorithm": "sha256"
+    }
+  }
+}

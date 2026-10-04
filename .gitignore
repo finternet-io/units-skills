@@ -1,0 +1,27 @@
+# Packaging output from scripts/package.sh
+dist/
+
+# Local secrets and env files (examples use UNITS_DEVELOPER_TOKEN, JWTs, keys)
+.env
+.env.*
+!.env.example
+
+# Python example client
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Node (if someone npm/pnpm installs next to the TS client)
+node_modules/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# Accidental key material
+*.pem
+*.key

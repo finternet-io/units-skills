@@ -1,0 +1,23 @@
+name: Content request
+description: Suggest a new topic, worked example, FAQ entry or example code
+title: "[request] "
+labels: ["content", "enhancement"]
+body:
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Audience
+      options: [External integrator, Product / solution design, UNITS engineer]
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What question should the skill be able to answer?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources or details you can share
+      description: Docs links, code paths, or observed behaviour (no secrets or confidential material).
